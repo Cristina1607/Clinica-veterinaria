@@ -1,0 +1,100 @@
+CREATE DATABASE IF NOT EXISTS ClinicaVeterinaria;
+USE ClinicaVeterinaria;
+
+CREATE TABLE IF NOT EXISTS Cliente (
+ID_Cliente INT AUTO_INCREMENT PRIMARY KEY,
+Nome_Cliente VARCHAR(100) NOT NULL,
+Telefone_Cliente VARCHAR(100) NOT NULL,
+Email_Cliente VARCHAR(100),
+Endereco_Cliente VARCHAR(255)
+);
+
+INSERT INTO Cliente ( Nome_Cliente, Telefone_Cliente, Email_Cliente, Endereco_Cliente)
+VALUES
+( 'Cristina', '123456789', 'cristina@nexist.com', 'rua jordão dos mares, 134'),
+( 'Gabriel', '134567890', 'gabriel@nexist.com', 'rua jordão das flores, 456'),
+( 'Sarah', '145678901', 'sarah@nexist.com', 'rua jordão dos mares e flores, 436');
+
+CREATE TABLE IF NOT EXISTS Animais (
+ID_Animais INT AUTO_INCREMENT PRIMARY KEY,
+ID_Cliente INT,
+FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_Cliente)
+ON DELETE SET NULL ON UPDATE CASCADE,
+Nome_Animal VARCHAR(100) NOT NULL,
+Especie_Animal VARCHAR(50) NOT NULL,
+Raca_Animal VARCHAR(50) NOT NULL,
+Data_Nascimento DATE,
+Sexo ENUM('M', 'F')
+);
+
+INSERT INTO Animais (Nome_Animal, Especie_Animal, Raca_Animal, Data_Nascimento, Sexo)
+VALUES 
+( 'Laika', 'Cão', 'Poodle', '2023/03/22', 'F'),
+( 'Kiara', 'Gato', 'Sphynx', '2021/08/14', 'F'),
+( 'Spike', 'Cão', 'Chihuahua', '2024/01/27', 'M');
+
+CREATE TABLE IF NOT EXISTS Veterinarios (
+ID_Veterinarios INT AUTO_INCREMENT PRIMARY KEY,
+Nome_Veterinario VARCHAR(100) NOT NULL,
+Especialidade VARCHAR(50) NOT NULL,
+Telefone_Veterinario VARCHAR(15),
+Email_Veterinario VARCHAR(100)
+);
+
+INSERT INTO Veterinarios ( Nome_Veterinario, Especialidade, Telefone_Veterinario, Email_Veterinario)
+VALUES
+( 'Aghata', 'Cirugia', '123456789', 'aghata@nexist.com'),
+( 'Amanda', 'Ortopedia', '134567890', 'amanda@nexist.com'),
+( 'Rafael', 'Radiologia', '145678901', 'rafael@nexist,com');
+
+CREATE TABLE IF NOT EXISTS Consultas (
+ID_Consultas INT AUTO_INCREMENT PRIMARY KEY,
+ID_Animais int,
+FOREIGN KEY (ID_Animais) REFERENCES Animais(ID_Animais)
+ON DELETE SET NULL ON UPDATE CASCADE,
+ID_Veterinarios INT,
+FOREIGN KEY (ID_Veterinarios) REFERENCES Veterinarios(ID_Veterinarios)
+ON DELETE SET NULL ON UPDATE CASCADE,
+Data_Consulta DATETIME,
+Diagnostico TEXT
+);
+
+INSERT INTO Consultas ( Data_Consulta, Diagnostico)
+VALUES
+( '2024/11/11', 'Mal digestão'),
+( '2024/11/12', 'Diabete'),
+( '2024/11/13', 'Mal digestão');
+
+CREATE TABLE IF NOT EXISTS Tratamentos (
+ID_Tratamentos INT AUTO_INCREMENT PRIMARY KEY,
+ID_Consultas INT,
+FOREIGN KEY (ID_Consultas) REFERENCES Consultas(ID_Consultas)
+ON DELETE SET NULL ON UPDATE CASCADE,
+Descricao TEXT,
+Medicamento VARCHAR(100),
+Dose_Remedio VARCHAR(50)
+);
+
+INSERT INTO Tratamentos ( Descricao, Medicamento, Dose_Remedio)
+VALUES
+( 'Aplicar em 2 em 2 horas', 'chá', '2ml'),
+( 'Aplicar em 8 em 8 horas', 'chá', '2ml'),
+( 'Aplicar em 12 em 12 horas', 'Compimido', '1uni');
+
+CREATE TABLE IF NOT EXISTS Pagamentos (
+ID_Pagamentos INT AUTO_INCREMENT PRIMARY KEY,
+ID_ConsultaS INT,
+FOREIGN KEY (ID_Consultas) REFERENCES Consultas(ID_Consultas)
+ON DELETE SET NULL ON UPDATE CASCADE,
+Valor_Pagamento DECIMAL(10, 2),
+Data_Pagamento DATE,
+Metodo_Pagamento ENUM('Dinheiro', 'Cartão', 'Pix')
+);
+
+INSERT INTO Pagamentos ( Valor_Pagamento, Data_Pagamento, Metodo_Pagamento)
+VALUES
+( '100', '2024/11/11', 'Dinheiro'),
+( '90', '2024/11/12', 'Pix'),
+( '95', '2024/11/13', 'Pix');
+
+SELECT * FROM Animais;
